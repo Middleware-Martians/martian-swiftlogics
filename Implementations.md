@@ -151,3 +151,20 @@ Each microservice in SwiftLogistics should have its own database for **encapsula
 ---
 
 
+
+![Alt text](https://drive.google.com/uc?export=view&id=1dRSy_ly47nd96S7Y26uyS4QlnGeBBWaO)
+
+![Alt text](https://drive.google.com/uc?export=view&id=16RmAbmbDUE7Y60UJGIUsaplby_lb-iuy)
+
+![Alt text](https://drive.google.com/uc?export=view&id=13eK7iRdkZhPUKtI2mnHI1tDGlXgqNIoH)
+
+![Alt text](https://drive.google.com/uc?export=view&id=1vD9CzOBjRaPILoY5Gi23C5IKvYZTmSCi)
+
+![Alt text](https://drive.google.com/uc?export=view&id=12uEFX9g67x34LCOajnztG5TBw9xvRHWY)
+
+![Alt text](https://drive.google.com/uc?export=view&id=1Kp5XoN6OXOC6h_ilUHI7QSD0XofacOgK)
+
+![Alt text](https://drive.google.com/uc?export=view&id=1pvD5g47hEtAMlPQUWrXyXSOvp0Nk6dVm)
+
+![Alt text](https://drive.google.com/uc?export=view&id=17H_TF5pk7sisilmkUeu_WsNQ8vtqmWsR)
+
