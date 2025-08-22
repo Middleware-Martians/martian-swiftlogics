@@ -1,5 +1,6 @@
 # Rust specific ignores
 /ExternalSystems/WMS/mock-wms/target/
+/MI_HOME
 **/target/
 **/*.rs.bk
 **/*.rs.swp
