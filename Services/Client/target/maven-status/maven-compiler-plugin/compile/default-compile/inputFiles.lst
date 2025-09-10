@@ -1,0 +1,9 @@
+D:\martian-swiftlogics\Services\Client\src\main\java\com\martian\clientms\ClientMsApplication.java
+D:\martian-swiftlogics\Services\Client\src\main\java\com\martian\clientms\repository\ClientRepository.java
+D:\martian-swiftlogics\Services\Client\src\main\java\com\martian\clientms\config\DatabaseConnectionChecker.java
+D:\martian-swiftlogics\Services\Client\src\main\java\com\martian\clientms\config\SecurityConfig.java
+D:\martian-swiftlogics\Services\Client\src\main\java\com\martian\clientms\controller\ClientController.java
+D:\martian-swiftlogics\Services\Client\src\main\java\com\martian\clientms\service\ClientService.java
+D:\martian-swiftlogics\Services\Client\src\main\java\com\martian\clientms\dto\RegisterRequest.java
+D:\martian-swiftlogics\Services\Client\src\main\java\com\martian\clientms\dto\LoginRequest.java
+D:\martian-swiftlogics\Services\Client\src\main\java\com\martian\clientms\entity\Client.java
