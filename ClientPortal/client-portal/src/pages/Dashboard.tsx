@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
+import { useAuth } from "../hooks/useAuth";
 
 interface Order {
   id: string;
@@ -14,8 +15,17 @@ interface Order {
 
 export default function Dashboard() {
   const navigate = useNavigate();
+  const { user, logout } = useAuth();
   const [orders, setOrders] = useState<Order[]>([]);
   const [loading, setLoading] = useState(true);
+
+  // Redirect to sign-in if not authenticated
+  useEffect(() => {
+    if (!user) {
+      navigate("/signin");
+      return;
+    }
+  }, [user, navigate]);
 
   useEffect(() => {
     // Mock data - replace with real API call
@@ -96,6 +106,9 @@ export default function Dashboard() {
               <span className="ml-4 text-gray-600">Client Portal</span>
             </div>
             <div className="flex items-center space-x-4">
+              <span className="text-sm text-gray-600">
+                Welcome, {user?.name || 'Client'}
+              </span>
               <button
                 onClick={() => navigate("/submit-order")}
                 className="bg-indigo-500 hover:bg-indigo-600 text-white px-4 py-2 rounded-lg font-medium transition-colors"
@@ -103,7 +116,10 @@ export default function Dashboard() {
                 Submit New Order
               </button>
               <button
-                onClick={() => navigate("/signin")}
+                onClick={() => {
+                  logout();
+                  navigate("/signin");
+                }}
                 className="text-gray-600 hover:text-gray-800"
               >
                 Sign Out

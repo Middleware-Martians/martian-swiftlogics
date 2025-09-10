@@ -30,17 +30,25 @@ export default function SignIn() {
     if (!validate()) return;
     setLoading(true);
     try {
-      // replace with your real API
-      const res = await fetch("/api/auth/signin", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email, password }),
-      });
-      if (!res.ok) {
-        const body = await res.json().catch(() => ({}));
-        throw new Error(body?.message || "Sign in failed");
-      }
-      // redirect to dashboard or home page
+      // Simulate API call - replace with your real API
+      await new Promise(resolve => setTimeout(resolve, 1000)); // Simulate network delay
+      
+      // For demo purposes, accept any email/password combination
+      // In real implementation, this would be your actual API call:
+      // const res = await fetch("/api/auth/signin", {
+      //   method: "POST",
+      //   headers: { "Content-Type": "application/json" },
+      //   body: JSON.stringify({ email, password }),
+      // });
+      // if (!res.ok) {
+      //   const body = await res.json().catch(() => ({}));
+      //   throw new Error(body?.message || "Sign in failed");
+      // }
+      
+      // Store user session (in real app, this would come from API response)
+      localStorage.setItem("user", JSON.stringify({ email, name: "Demo User" }));
+      
+      // Navigate to dashboard
       navigate("/dashboard");
     } catch (err: any) {
       setServerError(err.message || "Sign in failed");
