@@ -1,0 +1,16 @@
+[
+  {
+    "id": 1,
+    "address": "123 Main St",
+    "status": "pending",
+    "customer": "John Doe",
+    "phone": "+1 555-1234"
+  },
+  {
+    "id": 2,
+    "address": "45 Park Ave",
+    "status": "pending",
+    "customer": "Jane Smith",
+    "phone": "+1 555-5678"
+  }
+]
