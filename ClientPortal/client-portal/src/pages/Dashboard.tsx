@@ -20,12 +20,13 @@ export default function Dashboard() {
   const [loading, setLoading] = useState(true);
 
   // Redirect to sign-in if not authenticated
-  useEffect(() => {
-    if (!user) {
-      navigate("/signin");
-      return;
-    }
-  }, [user, navigate]);
+  // TODO: Uncomment this when backend is ready
+  // useEffect(() => {
+  //   if (!user) {
+  //     navigate("/signin");
+  //     return;
+  //   }
+  // }, [user, navigate]);
 
   useEffect(() => {
     // Mock data - replace with real API call
@@ -107,7 +108,7 @@ export default function Dashboard() {
             </div>
             <div className="flex items-center space-x-4">
               <span className="text-sm text-gray-600">
-                Welcome, {user?.name || 'Client'}
+                Welcome, {user?.name || 'Demo User'}
               </span>
               <button
                 onClick={() => navigate("/submit-order")}
