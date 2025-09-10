@@ -28,11 +28,10 @@ public class ClientService {
             throw new IllegalArgumentException("Email already in use");
         }
         Client c = new Client();
-        c.setName(req.getName());
+        c.setUsername(req.getUsername());
         c.setEmail(req.getEmail());
         c.setPassword(passwordEncoder.encode(req.getPassword()));
-        c.setPhone(req.getPhone());
-        c.setAddress(req.getAddress());
+
         return clientRepository.save(c);
     }
 
@@ -56,7 +55,7 @@ public class ClientService {
 
     public Client update(Long id, Client update) {
         Client existing = getById(id);
-        if (update.getName() != null) existing.setName(update.getName());
+        if (update.getUsername() != null) existing.setUsername(update.getUsername());
         if (update.getEmail() != null && !update.getEmail().equals(existing.getEmail())) {
             if (clientRepository.existsByEmail(update.getEmail())) {
                 throw new IllegalArgumentException("Email already in use");
@@ -66,13 +65,11 @@ public class ClientService {
         if (update.getPassword() != null && !update.getPassword().isEmpty()) {
             existing.setPassword(passwordEncoder.encode(update.getPassword()));
         }
-        if (update.getPhone() != null) existing.setPhone(update.getPhone());
-        if (update.getAddress() != null) existing.setAddress(update.getAddress());
         return clientRepository.save(existing);
     }
 
     public void delete(Long id) {
         clientRepository.deleteById(id);
     }
-}
+    }
 
