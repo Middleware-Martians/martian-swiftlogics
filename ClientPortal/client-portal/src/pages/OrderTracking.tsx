@@ -3,21 +3,14 @@ import { useParams, useNavigate, useLocation } from "react-router-dom";
 
 interface OrderDetails {
   id: string;
-  trackingNumber: string;
   status: "pending" | "processing" | "in_transit" | "delivered" | "failed";
   recipientName: string;
   recipientPhone: string;
   deliveryAddress: string;
-  city: string;
-  postalCode: string;
-  packageDescription: string;
   packageWeight: number;
-  packageValue: number;
-  priority: string;
+  priority: "standard" | "express" | "urgent";
   submittedDate: string;
   estimatedDelivery: string;
-  actualDelivery?: string;
-  deliveryInstructions: string;
   trackingHistory: TrackingEvent[];
 }
 
@@ -46,20 +39,14 @@ export default function OrderTracking() {
         // Mock order data
         const mockOrder: OrderDetails = {
           id: orderId,
-          trackingNumber: "SW12345678",
           status: "in_transit",
           recipientName: "John Doe",
           recipientPhone: "+94 77 123 4567",
           deliveryAddress: "123 Main Street, Apartment 4B",
-          city: "Colombo",
-          postalCode: "00100",
-          packageDescription: "Electronics - Mobile phone accessories",
           packageWeight: 0.5,
-          packageValue: 15000,
           priority: "express",
           submittedDate: "2025-09-08T10:30:00Z",
           estimatedDelivery: "2025-09-12T18:00:00Z",
-          deliveryInstructions: "Please call before delivery. Leave with security if not available.",
           trackingHistory: [
             {
               timestamp: "2025-09-08T10:30:00Z",
@@ -70,26 +57,14 @@ export default function OrderTracking() {
             {
               timestamp: "2025-09-08T14:20:00Z",
               status: "Processing",
-              location: "Warehouse - Colombo",
+              location: "Warehouse",
               description: "Package prepared and labeled"
             },
             {
               timestamp: "2025-09-09T08:15:00Z",
-              status: "Out for Pickup",
-              location: "Warehouse - Colombo", 
-              description: "Package assigned to driver"
-            },
-            {
-              timestamp: "2025-09-09T11:45:00Z",
               status: "In Transit",
-              location: "Distribution Center - Mount Lavinia",
+              location: "Distribution Center",
               description: "Package in transit to destination area"
-            },
-            {
-              timestamp: "2025-09-10T09:30:00Z",
-              status: "Out for Delivery",
-              location: "Local Hub - Colombo 03",
-              description: "Package loaded for final delivery"
             }
           ]
         };
@@ -207,7 +182,7 @@ export default function OrderTracking() {
             <div className="flex justify-between items-start mb-4">
               <div>
                 <h2 className="text-lg font-semibold text-gray-900">Order #{order.id}</h2>
-                <p className="text-sm text-gray-600">Tracking Number: {order.trackingNumber}</p>
+                {/* Tracking number removed to match SubmitOrder fields */}
               </div>
               <span className={`inline-flex px-3 py-1 text-sm font-semibold rounded-full ${
                 order.status === "delivered" ? "bg-green-100 text-green-800" :
@@ -225,16 +200,13 @@ export default function OrderTracking() {
                 <p className="text-sm text-gray-600">
                   <strong>Recipient:</strong> {order.recipientName}<br/>
                   <strong>Phone:</strong> {order.recipientPhone}<br/>
-                  <strong>Address:</strong> {order.deliveryAddress}, {order.city} {order.postalCode}
+                  <strong>Address:</strong> {order.deliveryAddress}
                 </p>
               </div>
-              
               <div>
                 <h3 className="font-medium text-gray-900 mb-2">Package Details</h3>
                 <p className="text-sm text-gray-600">
-                  <strong>Description:</strong> {order.packageDescription}<br/>
                   <strong>Weight:</strong> {order.packageWeight}kg<br/>
-                  <strong>Value:</strong> LKR {order.packageValue.toLocaleString()}<br/>
                   <strong>Priority:</strong> {order.priority.toUpperCase()}
                 </p>
               </div>
@@ -254,13 +226,7 @@ export default function OrderTracking() {
                 </div>
               </div>
               
-              {order.deliveryInstructions && (
-                <div className="mt-4">
-                  <p className="text-sm text-gray-600">
-                    <strong>Delivery Instructions:</strong> {order.deliveryInstructions}
-                  </p>
-                </div>
-              )}
+
             </div>
           </div>
         </div>

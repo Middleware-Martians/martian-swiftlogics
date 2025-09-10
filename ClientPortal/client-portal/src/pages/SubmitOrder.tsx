@@ -5,12 +5,7 @@ interface OrderFormData {
   recipientName: string;
   recipientPhone: string;
   deliveryAddress: string;
-  city: string;
-  postalCode: string;
-  packageDescription: string;
   packageWeight: number;
-  packageValue: number;
-  deliveryInstructions: string;
   priority: "standard" | "express" | "urgent";
 }
 
@@ -25,12 +20,7 @@ export default function SubmitOrder() {
     recipientName: "",
     recipientPhone: "",
     deliveryAddress: "",
-    city: "",
-    postalCode: "",
-    packageDescription: "",
     packageWeight: 0,
-    packageValue: 0,
-    deliveryInstructions: "",
     priority: "standard"
   });
   const [errors, setErrors] = useState<FormErrors>({});
@@ -42,11 +32,7 @@ export default function SubmitOrder() {
     if (!formData.recipientName.trim()) newErrors.recipientName = "Recipient name is required";
     if (!formData.recipientPhone.trim()) newErrors.recipientPhone = "Phone number is required";
     if (!formData.deliveryAddress.trim()) newErrors.deliveryAddress = "Delivery address is required";
-    if (!formData.city.trim()) newErrors.city = "City is required";
-    if (!formData.packageDescription.trim()) newErrors.packageDescription = "Package description is required";
     if (formData.packageWeight <= 0) newErrors.packageWeight = "Package weight must be greater than 0";
-    if (formData.packageValue <= 0) newErrors.packageValue = "Package value must be greater than 0";
-
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
   }
@@ -167,34 +153,7 @@ export default function SubmitOrder() {
                   {errors.deliveryAddress && <p className="text-red-500 text-xs mt-1">{errors.deliveryAddress}</p>}
                 </div>
 
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                  <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-1">
-                      City *
-                    </label>
-                    <input
-                      type="text"
-                      value={formData.city}
-                      onChange={(e) => handleInputChange("city", e.target.value)}
-                      className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
-                      placeholder="Colombo"
-                    />
-                    {errors.city && <p className="text-red-500 text-xs mt-1">{errors.city}</p>}
-                  </div>
-
-                  <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-1">
-                      Postal Code
-                    </label>
-                    <input
-                      type="text"
-                      value={formData.postalCode}
-                      onChange={(e) => handleInputChange("postalCode", e.target.value)}
-                      className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
-                      placeholder="00100"
-                    />
-                  </div>
-                </div>
+                
               </div>
             </div>
 
@@ -202,19 +161,7 @@ export default function SubmitOrder() {
             <div>
               <h3 className="text-lg font-medium text-gray-900 mb-4">Package Information</h3>
               <div className="space-y-4">
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">
-                    Package Description *
-                  </label>
-                  <textarea
-                    value={formData.packageDescription}
-                    onChange={(e) => handleInputChange("packageDescription", e.target.value)}
-                    rows={3}
-                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
-                    placeholder="Describe the contents of your package..."
-                  />
-                  {errors.packageDescription && <p className="text-red-500 text-xs mt-1">{errors.packageDescription}</p>}
-                </div>
+                
 
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   <div>
@@ -233,49 +180,12 @@ export default function SubmitOrder() {
                     {errors.packageWeight && <p className="text-red-500 text-xs mt-1">{errors.packageWeight}</p>}
                   </div>
 
-                  <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-1">
-                      Value (LKR) *
-                    </label>
-                    <input
-                      type="number"
-                      min="1"
-                      value={formData.packageValue}
-                      onChange={(e) => handleInputChange("packageValue", parseInt(e.target.value) || 0)}
-                      className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
-                      placeholder="5000"
-                    />
-                    {errors.packageValue && <p className="text-red-500 text-xs mt-1">{errors.packageValue}</p>}
-                  </div>
+                  
                 </div>
 
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">
-                    Delivery Priority
-                  </label>
-                  <select
-                    value={formData.priority}
-                    onChange={(e) => handleInputChange("priority", e.target.value)}
-                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
-                  >
-                    <option value="standard">Standard (3-5 business days)</option>
-                    <option value="express">Express (1-2 business days)</option>
-                    <option value="urgent">Urgent (Same day delivery)</option>
-                  </select>
-                </div>
+                
 
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">
-                    Delivery Instructions
-                  </label>
-                  <textarea
-                    value={formData.deliveryInstructions}
-                    onChange={(e) => handleInputChange("deliveryInstructions", e.target.value)}
-                    rows={2}
-                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
-                    placeholder="Any special instructions for delivery..."
-                  />
-                </div>
+                
               </div>
             </div>
 
