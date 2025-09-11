@@ -1,0 +1,30 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Custom CSS variables for consistent theming */
+:root {
+  --primary: #0B63E5;
+  --secondary: #00A86B;
+  --accent: #FF7A18;
+  --bg: #F4F7FB;
+  --card: #FFFFFF;
+  --text: #0F1724;
+  --muted: #64748B;
+  --error: #E02424;
+}
+
+/* Global overrides */
+body {
+  margin: 0;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+    sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+code {
+  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
+    monospace;
+}
