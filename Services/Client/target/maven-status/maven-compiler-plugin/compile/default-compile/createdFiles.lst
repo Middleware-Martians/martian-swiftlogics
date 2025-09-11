@@ -1,0 +1,9 @@
+com\martian\clientms\dto\RegisterRequest.class
+com\martian\clientms\config\SecurityConfig.class
+com\martian\clientms\controller\ClientController.class
+com\martian\clientms\repository\ClientRepository.class
+com\martian\clientms\entity\Client.class
+com\martian\clientms\service\ClientService.class
+com\martian\clientms\config\DatabaseConnectionChecker.class
+com\martian\clientms\ClientMsApplication.class
+com\martian\clientms\dto\LoginRequest.class
