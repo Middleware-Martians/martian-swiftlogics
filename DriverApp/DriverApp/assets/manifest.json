@@ -1,0 +1,24 @@
+[
+  {
+    "id": 1,
+    "address": "Galle Face Green, Kompannaweediya, Slave Island, Colombo, Colombo District, Western Province, Sri Lanka",
+    "status": "ongoing",
+    "customer": "John Doe",
+    "phone": "+1 555-1234"
+  },
+  {
+    "id": 2,
+    "address": "Colombo Fort, Olcott Mawatha, L B Gate, Fort, Slave Island, Colombo, Colombo District, Western Province, 01100, Sri Lanka",
+    "status": "ongoing",
+    "customer": "Jane Smith",
+    "phone": "+1 555-5678"
+  },
+  {
+    "id": 3,
+    "address": "Kandy City Center, Kandy, Sri Lanka",
+    "status": "delivered",
+    "customer": "Alice Johnson",
+    "phone": "+1 555-8765",
+    "message":"got safely"
+  }
+]
