@@ -32,5 +32,17 @@ services:
     environment:
       - DATABASE_URL=postgresql://admin_user:admin_password@postgres:5432/cms_db
 
+  ros:
+    build: ./ROS
+    container_name: swiftlogistics_ros
+    restart: always
+    ports:
+      - "8001:8001"
+    depends_on:
+      postgres:
+        condition: service_healthy
+    environment:
+      - DATABASE_URL=postgresql://admin_user:admin_password@postgres:5432/ros_db
+
 volumes:
   postgres_data:
