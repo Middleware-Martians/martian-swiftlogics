@@ -8,12 +8,29 @@ services:
     environment:
       POSTGRES_USER: admin_user
       POSTGRES_PASSWORD: admin_password
-      POSTGRES_DB: postgres   # default DB, we’ll use it to create others
+      POSTGRES_DB: postgres   # default DB, we'll use it to create others
     ports:
       - "5432:5432"
     volumes:
       - postgres_data:/var/lib/postgresql/data
       - ./init-scripts:/docker-entrypoint-initdb.d  # run init SQL files at startup
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U admin_user -d postgres"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  cms:
+    build: ./CMS
+    container_name: swiftlogistics_cms
+    restart: always
+    ports:
+      - "8000:8000"
+    depends_on:
+      postgres:
+        condition: service_healthy
+    environment:
+      - DATABASE_URL=postgresql://admin_user:admin_password@postgres:5432/cms_db
 
 volumes:
   postgres_data:
