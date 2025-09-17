@@ -44,5 +44,17 @@ services:
     environment:
       - DATABASE_URL=postgresql://admin_user:admin_password@postgres:5432/ros_db
 
+  wms:
+    build: ./WMS
+    container_name: swiftlogistics_wms
+    restart: always
+    ports:
+      - "8002:8002"
+    depends_on:
+      postgres:
+        condition: service_healthy
+    environment:
+      - DATABASE_URL=postgresql://admin_user:admin_password@postgres:5432/wms_db
+
 volumes:
   postgres_data:
