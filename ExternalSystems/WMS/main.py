@@ -6,7 +6,24 @@ from sqlalchemy.orm import sessionmaker, Session
 from typing import List, Optional
 import time
 import sys
+import asyncio
+import logging
 from datetime import datetime
+from contextlib import asynccontextmanager
+
+# Import TCP server
+from tcp_server import (
+    start_tcp_server, 
+    stop_tcp_server, 
+    get_tcp_server,
+    broadcast_package_received,
+    broadcast_package_loaded,
+    broadcast_status_update
+)
+
+# Setup logging
+logging.basicConfig(level=logging.INFO)
+logger = logging.getLogger(__name__)
 
 # Database setup
 DATABASE_URL = "postgresql://admin_user:admin_password@postgres:5432/wms_db"
@@ -112,11 +129,26 @@ def create_tables_with_retry():
 
 create_tables_with_retry()
 
-# FastAPI app
+# Lifespan manager for FastAPI
+@asynccontextmanager
+async def lifespan(app: FastAPI):
+    # Startup: Start TCP server
+    logger.info("Starting WMS TCP server...")
+    tcp_task = asyncio.create_task(start_tcp_server())
+    try:
+        yield
+    finally:
+        # Shutdown: Stop TCP server
+        logger.info("Stopping WMS TCP server...")
+        tcp_task.cancel()
+        await stop_tcp_server()
+
+# FastAPI app with lifespan
 app = FastAPI(
     title="WMS Service", 
     description="Warehouse Management System API for SwiftLogistics",
-    version="1.0.0"
+    version="1.0.0",
+    lifespan=lifespan
 )
 
 # Database dependency
@@ -142,10 +174,30 @@ def health_check():
         "database": "wms_db"
     }
 
+# TCP server status endpoint
+@app.get("/tcp-status")
+def tcp_server_status():
+    """Get TCP server status and connected clients"""
+    server = get_tcp_server()
+    if server:
+        return {
+            "tcp_server": "running",
+            "host": server.host,
+            "port": server.port,
+            "connected_clients": len(server.clients),
+            "clients": server.get_connected_clients(),
+            "timestamp": datetime.now().isoformat()
+        }
+    else:
+        return {
+            "tcp_server": "not_running",
+            "timestamp": datetime.now().isoformat()
+        }
+
 # CRUD Operations
 
 @app.post("/orders", response_model=OrderResponse)
-def create_order(order: OrderCreate, db: Session = Depends(get_db)):
+async def create_order(order: OrderCreate, db: Session = Depends(get_db)):
     """Create a new order"""
     # Validate status
     if not validate_status(order.status):
@@ -167,6 +219,20 @@ def create_order(order: OrderCreate, db: Session = Depends(get_db)):
     db.add(db_order)
     db.commit()
     db.refresh(db_order)
+    
+    # Broadcast package received message via TCP
+    if order.status == "received":
+        package_data = {
+            "package_id": f"PKG_{db_order.id}",
+            "order_number": db_order.order_number,
+            "customer_id": db_order.customer_id,
+            "product_name": db_order.product_name,
+            "quantity": db_order.quantity,
+            "received_at": db_order.created_at.isoformat() + "Z",
+            "warehouse_location": f"WH-{db_order.id % 10}-A"
+        }
+        await broadcast_package_received(package_data)
+    
     return db_order
 
 @app.get("/orders", response_model=List[OrderResponse])
@@ -297,7 +363,7 @@ def receive_order(order_data: OrderReceive, db: Session = Depends(get_db)):
     return db_order
 
 @app.put("/warehouse/orders/{order_id}/assign-driver", response_model=OrderResponse)
-def assign_driver(order_id: int, assignment: DriverAssignment, db: Session = Depends(get_db)):
+async def assign_driver(order_id: int, assignment: DriverAssignment, db: Session = Depends(get_db)):
     """Assign a driver to an order"""
     order = db.query(Order).filter(Order.id == order_id).first()
     if not order:
@@ -310,14 +376,37 @@ def assign_driver(order_id: int, assignment: DriverAssignment, db: Session = Dep
             detail=f"Cannot assign driver to order with status: {order.status}"
         )
     
+    old_status = order.status
     order.driver_id = assignment.driver_id
     
     # Auto-update status if order is ready
-    if order.status == "in_warehouse":
-        order.status = "loaded"
+    order.status = "loaded"  # Always set to loaded when driver assigned
     
     db.commit()
     db.refresh(order)
+    
+    # Broadcast package loaded message via TCP
+    package_data = {
+        "package_id": f"PKG_{order.id}",
+        "order_number": order.order_number,
+        "customer_id": order.customer_id,
+        "driver_id": order.driver_id,
+        "vehicle_id": f"VEH_{order.driver_id}",
+        "loaded_at": datetime.utcnow().isoformat() + "Z",
+        "estimated_delivery": None  # Calculate based on route optimization
+    }
+    await broadcast_package_loaded(package_data)
+    
+    # Also broadcast status update
+    status_data = {
+        "package_id": f"PKG_{order.id}",
+        "order_number": order.order_number,
+        "old_status": old_status,
+        "new_status": order.status,
+        "driver_id": order.driver_id,
+        "updated_by": "wms_system"
+    }
+    await broadcast_status_update(status_data)
     
     return order
 
